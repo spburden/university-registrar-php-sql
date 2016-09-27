@@ -27,8 +27,8 @@
             //Arrange
             $name = "Stephen Burden";
             $enroll_date = 2014-11-22;
-            $id = 1;
-            $test_student = new Student($name, $enroll_date, $id);
+            //$id = 1;
+            $test_student = new Student($name, $enroll_date);
             $test_student->save();
 
             //Act
@@ -42,13 +42,35 @@
             //Arrange
             $name = "Stephen Burden";
             $enroll_date = "2014-11-22";
-            $id = 1;
-            $test_student = new Student($name, $enroll_date, $id);
+            //$id = 1;
+            $test_student = new Student($name, $enroll_date);
             $test_student->save();
             //Act
             $result = Student::getAll();
             //Assert
             $this->assertEquals($test_student, $result[0]);
+        }
+
+        function testGetCourses()
+        {
+            //Arrange
+            $name = "Stephen Burden";
+            $enroll_date = "2014-11-22";
+            //$id = 1;
+            $test_student = new Student($name, $enroll_date);
+            $test_student->save();
+
+            $course_name = "History of Wales";
+            $course_number = "Wales101";
+            //$id2 = 3;
+            $test_course = new Course($course_name, $course_number);
+            $test_course->save();
+
+            //Act
+            $test_student->addCourse($test_course);
+
+            //Assert
+            $this->assertEquals($test_student->getCourses(), [$test_course]);
         }
 
     }
