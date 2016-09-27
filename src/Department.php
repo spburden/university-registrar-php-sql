@@ -10,7 +10,7 @@
             $this->id = $id;
         }
 
-        function getDepartmantProperty($property_id)
+        function getDepartmentProperty($property_id)
         {
             switch($property_id){
                 case "department_name":
@@ -24,7 +24,7 @@
             }
         }
 
-        function setDepartmantProperty($property_id, $new_value)
+        function setDepartmentProperty($property_id, $new_value)
         {
             switch($property_id){
                 case "department_name":
@@ -40,7 +40,7 @@
 
         function save()
         {
-            $GLOBALS['DB']->exec("INSERT INTO departments (department_name) VALUES ('{$this->getDepartmantProperty('department_name')}')");
+            $GLOBALS['DB']->exec("INSERT INTO departments (department_name) VALUES ('{$this->getDepartmentProperty('department_name')}')");
             $this->id = $GLOBALS['DB']->lastInsertId();
         }
 
@@ -51,7 +51,7 @@
             foreach($returned_departments as $department) {
                 $department_name = $department['department_name'];
                 $id = $department['id'];
-                $new_department = new Department($department_name, $department_number, $id);
+                $new_department = new Department($department_name, $id);
                 array_push($departments, $new_department);
             }
             return $departments;
@@ -95,9 +95,9 @@
         function getCourses()
         {
             $returned_courses = $GLOBALS['DB']->query("SELECT courses.* FROM departments
-                 JOIN departments_courses_students ON (departments_courses_students.course_id = courses.id)
+                 JOIN departments_courses_students ON (departments_courses_students.department_id = departments.id)
                  JOIN courses ON (courses.id = departments_courses_students.course_id)
-                 WHERE department.id = {$this->getDepartmantProperty('id')};");
+                 WHERE departments.id = {$this->getDepartmentProperty('id')};");
             $courses = array();
             foreach($returned_courses as $course) {
                 $course_name = $course['course_name'];
@@ -112,9 +112,9 @@
         function getStudents()
         {
             $returned_students = $GLOBALS['DB']->query("SELECT students.* FROM departments
-                 JOIN departments_courses_students ON (departments_courses_students.student_id = students.id)
+                 JOIN departments_courses_students ON (departments_courses_students.department_id = departments.id)
                  JOIN students ON (students.id = departments_courses_students.student_id)
-                 WHERE department.id = {$this->getDepartmantProperty('id')};");
+                 WHERE departments.id = {$this->getDepartmentProperty('id')};");
             $students = array();
             foreach($returned_students as $student) {
                 $name = $student['name'];

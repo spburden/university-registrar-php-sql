@@ -54,14 +54,14 @@
             //Arrange
             $name = "Stephen Burden";
             $enroll_date = "2014-11-22";
-            $id = 1;
-            $test_student = new Student($name, $enroll_date, $id);
+            // $id = 1;
+            $test_student = new Student($name, $enroll_date);
             $test_student->save();
 
             $course_name = "History of Wales";
             $course_number = "Wales101";
-            $id2 = 3;
-            $test_course = new Course($course_name, $course_number, $id2);
+            // $id2 = 3;
+            $test_course = new Course($course_name, $course_number);
             $test_course->save();
 
             //Act
