@@ -94,12 +94,13 @@
         function delete()
         {
             $GLOBALS['DB']->exec("DELETE FROM students WHERE id = {$this->getStudentProperty('id')};");
+            $GLOBALS['DB']->exec("DELETE FROM courses_students WHERE student_id = {$this->getStudentProperty('id')};");
         }
 
-        function addCourse($course)
-       {
-           $GLOBALS['DB']->exec("INSERT INTO courses_students (course_id, student_id) VALUES ({$course->getCourseProperty('id')}, {$this->getStudentProperty('id')});");
-       }
+        function addCourse($new_course)
+        {
+           $GLOBALS['DB']->exec("INSERT INTO courses_students (course_id, student_id) VALUES ({$new_course->getCourseProperty('id')}, {$this->getStudentProperty('id')});");
+        }
 
        function getCourses()
        {
