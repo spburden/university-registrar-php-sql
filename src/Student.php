@@ -48,7 +48,7 @@
 
         function save()
         {
-            $GLOBALS['DB']->exec("INSERT INTO students (name, enroll_date) VALUES ('{$this->getStudentProperty("name")}', {$this->getStudentProperty("enroll_date")})");
+            $GLOBALS['DB']->exec("INSERT INTO students (name, enroll_date) VALUES ('{$this->getStudentProperty('name')}', {$this->getStudentProperty('enroll_date')})");
             $this->id = $GLOBALS['DB']->lastInsertId();
         }
 
@@ -61,7 +61,7 @@
                 $enroll_date = $student['enroll_date'];
                 $id = $student['id'];
                 $new_student = new Student($name, $enroll_date, $id);
-                array_push($tasks, $new_student);
+                array_push($students, $new_student);
             }
             return $students;
         }
