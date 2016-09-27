@@ -48,7 +48,7 @@
 
         function save()
         {
-            $GLOBALS['DB']->exec("INSERT INTO students (name, enroll_date) VALUES ('{$this->getStudentProperty('name')}', {$this->getStudentProperty('enroll_date')})");
+            $GLOBALS['DB']->exec("INSERT INTO students (name, enroll_date) VALUES ('{$this->getStudentProperty('name')}', '{$this->getStudentProperty('enroll_date')}')");
             $this->id = $GLOBALS['DB']->lastInsertId();
         }
 
@@ -100,18 +100,18 @@
        {
            $GLOBALS['DB']->exec("INSERT INTO courses_students (course_id, student_id) VALUES ({$course->getCourseProperty('id')}, {$this->getStudentProperty('id')});");
        }
+
        function getCourses()
        {
-           $query = $GLOBALS['DB']->query("SELECT course_id FROM courses_students WHERE student_id = {$this->getId()};");
-           $course_ids = $query->fetchAll(PDO::FETCH_ASSOC);
+           $returned_courses = $GLOBALS['DB']->query("SELECT courses.* FROM students
+                JOIN courses_students ON (courses_students.student_id = students.id)
+                JOIN courses ON (courses.id = courses_students.course_id)
+                WHERE students.id = {$this->getStudentProperty('id')};");
            $courses = array();
-           foreach($course_ids as $id) {
-               $course_id = $id['course_id'];
-               $result = $GLOBALS['DB']->query("SELECT * FROM courses WHERE id = {$course_id};");
-               $returned_course = $result->fetchAll(PDO::FETCH_ASSOC);
-               $course_name = $returned_course[0]['course_name'];
-               $course_number = $returned_course[0]['course_number'];
-               $id = $returned_course[0]['id'];
+           foreach($returned_courses as $course) {
+               $course_name = $course['course_name'];
+               $course_number = $course['course_number'];
+               $id = $course['id'];
                $new_course = new Course($course_name, $course_number, $id);
                array_push($courses, $new_course);
            }

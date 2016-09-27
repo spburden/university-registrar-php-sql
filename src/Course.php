@@ -48,7 +48,7 @@
 
         function save()
         {
-            $GLOBALS['DB']->exec("INSERT INTO courses (course_name, course_number) VALUES ('{$this->getCourseProperty('course_name')}', {$this->getCourseProperty('course_number')})");
+            $GLOBALS['DB']->exec("INSERT INTO courses (course_name, course_number) VALUES ('{$this->getCourseProperty('course_name')}', '{$this->getCourseProperty('course_number')}')");
             $this->id = $GLOBALS['DB']->lastInsertId();
         }
 
@@ -104,16 +104,15 @@
 
         function getStudents()
         {
-            $query = $GLOBALS['DB']->query("SELECT student_id FROM courses_students WHERE course_id = {$this->getCourseProperty('id')};");
-            $student_ids = $query->fetchAll(PDO::FETCH_ASSOC);
+            $returned_students = $GLOBALS['DB']->query("SELECT students.* FROM courses
+                 JOIN courses_students ON (courses_students.course_id = courses.id)
+                 JOIN students ON (students.id = courses_students.student_id)
+                 WHERE courses.id = {$this->getCourseProperty('id')};");
             $students = array();
-            foreach($student_ids as $id) {
-                $student_id = $id['student_id'];
-                $result = $GLOBALS['DB']->query("SELECT * FROM students WHERE id = {$student_id};");
-                $returned_student = $result->fetchAll(PDO::FETCH_ASSOC);
-                $name = $returned_student[0]['name'];
-                $enroll_date = $returned_student[0]['enroll_date'];
-                $id = $returned_student[0]['id'];
+            foreach($returned_students as $student) {
+                $name = $student['name'];
+                $enroll_date = $student['enroll_date'];
+                $id = $student['id'];
                 $new_student = new Student($name, $enroll_date, $id);
                 array_push($students, $new_student);
             }
