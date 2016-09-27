@@ -69,6 +69,7 @@
         static function deleteAll()
         {
          $GLOBALS['DB']->exec("DELETE FROM students;");
+         $GLOBALS['DB']->exec("DELETE FROM courses_students;");
         }
 
         static function find($search_id)
@@ -117,6 +118,22 @@
                array_push($courses, $new_course);
            }
            return $courses;
+       }
+
+       function getStatus($course_id)
+       {
+           $returned_statuses = $GLOBALS['DB']->query("SELECT status FROM courses_students WHERE student_id = {$this->getStudentProperty('id')} AND course_id = {$course_id};");
+           foreach ($returned_statuses as $status)
+           {
+               $return = $status['status'];
+           }
+           
+           return $return;
+       }
+
+       function setStatus($new_status)
+       {
+           $GLOBALS['DB']->exec("UPDATE courses_students SET status = $new_status WHERE student_id = {$this->getStudentProperty('id')};");
        }
     }
 ?>

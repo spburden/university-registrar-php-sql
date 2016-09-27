@@ -71,7 +71,7 @@
             //Assert
             $this->assertEquals($test_department->getStudents(), [$test_student]);
         }
-        
+
         function testGetCourses()
         {
             //Arrange
@@ -88,6 +88,7 @@
             $department_name = "Dept of Welsh History";
             $test_department = new Department($department_name);
             $test_department->save();
+
 
             //Act
             $test_department->addCourseNStudent($test_course, $test_student);
